@@ -7,10 +7,10 @@
     state: directory
     owner: "{{ fg_forgejo_userid }}"
     group: "{{ fg_forgejo_groupid }}"
-    recurse: yes
+    recurse: true
+    mode: "0550"
     setype: container_file_t
   with_items:
-    - "{{ fg_forgejo_custom_dir }}"
     - "{{ fg_forgejo_custom_dir }}templates"
     - "{{ fg_forgejo_custom_dir }}templates/custom"
     - "{{ fg_forgejo_custom_dir }}templates/mail"
@@ -31,6 +31,7 @@
     dest: "{{ fg_forgejo_custom_dir }}options/label/{{ item | basename }}"
     owner: "{{ fg_forgejo_userid }}"
     group: "{{ fg_forgejo_groupid }}"
+    mode: "0400"
     setype: container_file_t
   with_items: "{{ fg_forgejo_labels }}"
   notify:
@@ -43,6 +44,7 @@
     dest: "{{ fg_forgejo_custom_dir }}options/licences/{{ item | basename }}"
     owner: "{{ fg_forgejo_userid }}"
     group: "{{ fg_forgejo_groupid }}"
+    mode: "0400"
     setype: container_file_t
   with_items: "{{ fg_forgejo_licences }}"
   notify:
@@ -55,8 +57,9 @@
     dest: "{{ fg_forgejo_custom_dir }}public/assets/{{ item.key }}"
     owner: "{{ fg_forgejo_userid }}"
     group: "{{ fg_forgejo_groupid }}"
+    mode: "0400"
     setype: container_file_t
-  loop: "{{ fg_forgejo_assets|dict2items }}"
+  loop: "{{ fg_forgejo_assets | dict2items }}"
   notify:
     - Restart forgejo
 
@@ -67,7 +70,8 @@
     dest: "{{ fg_forgejo_custom_dir }}templates/{{ item.key }}"
     owner: "{{ fg_forgejo_userid }}"
     group: "{{ fg_forgejo_groupid }}"
+    mode: "0400"
     setype: container_file_t
-  loop: "{{ fg_forgejo_templates|dict2items }}"
+  loop: "{{ fg_forgejo_templates | dict2items }}"
   notify:
     - Restart forgejo

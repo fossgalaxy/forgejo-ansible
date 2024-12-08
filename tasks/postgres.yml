@@ -2,7 +2,7 @@
 
 - name: Ensure the postgresql library is available on the host
   become: true
-  dnf:
+  ansible.builtin.dnf:
     name: python3-psycopg2
     state: installed
 

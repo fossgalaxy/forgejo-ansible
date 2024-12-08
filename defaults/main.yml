@@ -28,11 +28,11 @@ fg_forgejo_db_password: ""
 fg_forgejo_name: forgejo
 fg_forgejo_slogan: "Beyond coding. We Forge."
 fg_forgejo_domain: "{{ inventory_hostname }}"
-fg_forgejo_domain_noreply: "noreply.{{fg_forgejo_domain}}"
+fg_forgejo_domain_noreply: "noreply.{{ fg_forgejo_domain }}"
 
 # port bindings
 fg_forgejo_web_port: 3000 # bind (host) port
-fg_forgejo_web_url: "https://{{fg_forgejo_domain}}/"
+fg_forgejo_web_url: "https://{{ fg_forgejo_domain }}/"
 
 fg_forgejo_ssh_port: 222 # bind (host) port
 fg_forgejo_ssh_domain: "{{ fg_forgejo_domain }}"
