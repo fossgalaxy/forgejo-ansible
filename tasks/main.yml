@@ -1,0 +1,16 @@
+---
+# tasks file for fg_forgejo
+
+- include_tasks: secret.yml
+- include_tasks: install.yml
+- include_tasks: customise.yml
+
+- include_tasks: postgres.yml
+  when: fg_forgejo_db_manage
+
+- name: Ensure service is running
+  become: true
+  service:
+    name: forgejo
+    state: started
+

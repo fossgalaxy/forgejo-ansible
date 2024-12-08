@@ -1,0 +1,66 @@
+---
+
+- name: Create forgejo volume quadlet
+  become: true
+  template:
+    src: forgejo.volume.j2
+    dest: "{{ fg_forgejo_service_dir }}forgejo-data.volume"
+  vars:
+    name: data
+  notify:
+    - Reload systemd units
+    - Restart forgejo
+
+- name: Ensure git volume exists
+  become: true
+  template:
+    src: forgejo.volume.j2
+    dest: "{{ fg_forgejo_service_dir }}forgejo-git.volume"
+  vars:
+    name: "git data"
+  notify:
+    - Reload systemd units
+    - Restart forgejo
+
+- name: Ensure configuration folder exists
+  become: true
+  ansible.builtin.file:
+    dest: "{{ item }}"
+    state: directory
+    owner: "{{ fg_forgejo_userid }}"
+    group: "{{ fg_forgejo_groupid }}"
+    recurse: yes
+    setype: container_file_t
+  with_items:
+    - "{{ fg_forgejo_custom_dir }}"
+    - "{{ fg_forgejo_custom_dir }}conf"
+
+- name: Provide customised forgejo config
+  become: true
+  ansible.builtin.template:
+    src: app.ini.j2
+    dest: "{{ fg_forgejo_custom_dir }}/conf/app.ini"
+    owner: "{{ fg_forgejo_userid }}"
+    group: "{{ fg_forgejo_groupid }}"
+    setype: container_file_t
+  notify:
+    - Restart forgejo
+
+- name: Create forgejo network quadlet
+  become: true
+  template:
+    src: forgejo.network.j2
+    dest: "{{ fg_forgejo_service_dir }}forgejo.network"
+  notify:
+    - Reload systemd units
+    - Restart forgejo
+
+- name: Create forgejo container quadlet
+  become: true
+  template:
+    src: forgejo.container.j2
+    dest: "{{ fg_forgejo_service_dir }}forgejo.container"
+  notify:
+    - Reload systemd units
+    - Restart forgejo
+
